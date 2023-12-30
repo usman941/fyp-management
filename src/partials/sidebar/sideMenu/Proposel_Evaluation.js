@@ -19,8 +19,8 @@ const Proposel_Evaluation = () => {
     console.log("jsonObject:",jsonObject)
     useEffect(() => {
         getPersons().then(data => {
-            console.log("groups lists:",data.groupData)
-            setPersons(data.groupData)
+            console.log("groups lists:",data.groups)
+            setPersons(data.groups)
         })
     }, [])
 
@@ -28,7 +28,7 @@ const Proposel_Evaluation = () => {
     const getPersons = async () => {
         console.log("id",jsonObject?.id)
         try {
-            return await axios.get(`http://localhost:3000/group/getgroups/${jsonObject?.id}`,
+            return await axios.get(`http://localhost:3000/group/getall`,
                 {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -94,17 +94,28 @@ const Proposel_Evaluation = () => {
         },
         {
             name: 'Group Name',
-            selector: row => row.groupName,
+            selector: row => row?.name,
             sortable: true,
             filterable: true,
         },
         {
             name: 'Members',
-            selector: row => row.memberNames.map((member,index)=>member.fname+' '+member.lname).join(', '),
+            selector: row => row.members.map((member,index)=>member.fname+' '+member.lname).join(', '),
             sortable: true,
             filterable: true,
         },
-      
+        {
+            name: 'Supervisor',
+            selector: row => row?.supervisor?.fname+' '+row?.supervisor?.lname            ,
+            sortable: true,
+            filterable: true,
+        },
+        {
+            name: 'Title',
+            selector: row => row?.project?.title  ,
+            sortable: true,
+            filterable: true,
+        },
         {
             name: '',
             cell: (person) => <div className='flex gap-2'>
@@ -114,7 +125,7 @@ const Proposel_Evaluation = () => {
             :''}
                 {jsonObject?.role==='Teacher'?<>
                 {console.log("person:",person)}
-                <EditCell path={'/evaluation/evaluate-proposel/'+person?.groupId}/>
+                <EditCell path={'/evaluation/evaluate-proposel/'+person?._id}/>
              </>
             :''}
              
@@ -129,8 +140,7 @@ const Proposel_Evaluation = () => {
 
     const filterFunction = (search, data) => {
         return data.filter((row) =>
-            row.groupName.toLowerCase().includes(search.toLowerCase()) ||
-            row.memberNames.map((member,index)=>member.fname+' '+member.lname).join(', ').toLowerCase().includes(search.toLowerCase()) 
+            row?.name?.toLowerCase().includes(search.toLowerCase())
             );
     };
     return (

@@ -110,6 +110,12 @@ const GroupsLists = () => {
             filterable: true,
         },
         {
+            name: 'Project',
+            selector: row => row?.project?.title? row?.project?.title:"Not Assigned",
+            sortable: true,
+            filterable: true,
+        },
+        {
             name: '',
             cell: (person) => <div className='flex gap-2'>
                 {jsonObject?.role==='Admin'?<>
