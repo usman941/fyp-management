@@ -121,6 +121,7 @@ const Dashboard = ({ user }) => {
 
                             <Route exact path="/evaluation" element={<Evaluation />} />
                             <Route exact path="/evaluation/evaluate-proposel/:id" element={<CreateEvaluation />} />
+
                             <Route exact path="/superviser/evaluation" element={<Superviser_evaluation />} />
                             <Route exact path="/superviser/proposel" element={<Proposel_Evaluation />} />
 
