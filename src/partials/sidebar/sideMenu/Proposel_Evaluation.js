@@ -128,7 +128,6 @@ const Proposel_Evaluation = () => {
                 <EditCell path={'/evaluation/evaluate-proposel/'+person?._id}/>
              </>
             :''}
-             
             </div>,
             ignoreRowClick: true,
             allowOverflow: true,
@@ -145,7 +144,7 @@ const Proposel_Evaluation = () => {
     };
     return (
 
-        <Detail title={'Proposel Evaluation'} column={column} data={filterFunction(search,persons)} search={search} setSearch={setSearch}>
+        <Detail title={'Proposal Evaluation'} column={column} data={filterFunction(search,persons)} search={search} setSearch={setSearch}>
             {/* <CreateNew title={'Add New'} path={'/evaluation/evaluate-proposel'} >
                 <FaUserPlus size={17} className='text-white' />
             </CreateNew> */}

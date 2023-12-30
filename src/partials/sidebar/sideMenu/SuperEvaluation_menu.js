@@ -23,7 +23,7 @@ const SuperEvaluation_menu = ({
 
   return (
     <SideMenu
-    title={"Proposel Evaluation"}
+    title={"Proposal Evaluation"}
     pathname={"/superviser/proposel"}
     checkUrl={"/all"}
     checkPathName={"all"}

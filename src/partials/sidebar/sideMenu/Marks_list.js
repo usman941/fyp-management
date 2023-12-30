@@ -73,7 +73,7 @@ const Marks_list = () => {
         },
         {
             name: 'Proposel Marks',
-            selector: row => row?.ProposelMarks!=null?row?.ProposelMarks:"Not Evaluated",
+            selector: row => row?.ProposalMarks!=null?row?.ProposalMarks:"Not Evaluated",
             sortable: true,
             filterable: true,
         },
