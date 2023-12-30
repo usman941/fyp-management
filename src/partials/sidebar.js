@@ -15,15 +15,16 @@ import Commite_evalutaion_menu from "./sidebar/sideMenu/Commite_evaluation_menu"
 import Evaluation_marks from "./sidebar/sideMenu/Evaluation_marks";
 import Marks_list_menu from "./sidebar/sideMenu/Marks_list_menu";
 import Presentation_menu from "./sidebar/sideMenu/Presentation_menu";
+import SuperEvaluation_menu from "./sidebar/sideMenu/SuperEvaluation_menu";
 
 
-const Sidebar = ({  sidebarOpen, setSidebarOpen }) => {
-    const {user}=useContext(AuthContext);
+const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
+    const { user } = useContext(AuthContext);
     const location = useLocation();
     const { pathname } = location;
-  console.log("user in sidebar:",user);
-const jsonObject=JSON.parse(user);
-  console.log("role in sidebar:",jsonObject.id);
+    console.log("user in sidebar:", user);
+    const jsonObject = JSON.parse(user);
+    console.log("role in sidebar:", jsonObject.id);
     const trigger = useRef(null);
     const sidebar = useRef(null);
 
@@ -153,17 +154,17 @@ const jsonObject=JSON.parse(user);
                                 }}
                             </SidebarLinkGroup>
 
-                            {jsonObject?.role === "Admin"?
+                            {jsonObject?.role === "Admin" ?
 
                                 <AdminSection
                                     pathname={pathname}
                                     sidebarExpanded={sidebarExpanded}
                                     setSidebarExpanded={setSidebarExpanded}
                                 />
-                                :""
-                              } 
-                         
-                           
+                                : ""
+                            }
+
+
                             <SidebarLinkGroup
                                 activecondition={
                                     pathname === "/template/download" || pathname.includes("/template/download")
@@ -213,45 +214,64 @@ const jsonObject=JSON.parse(user);
                                 }}
                             </SidebarLinkGroup>
                             {
-                                jsonObject?.role!=='Student' &&<>
+                                jsonObject?.role !== 'Student' &&
                                 <SidebarLinkGroup
-                                activecondition={
-                                    pathname === "/committe/all" || pathname.includes("committe")
-                                }
-                            >
-                                {(handleClick, open) => {
-                                    return (
-                                        <CommitteMenu
-                                            handleClick={handleClick}
-                                            open={open}
-                                            sidebarExpanded={sidebarExpanded}
-                                            setSidebarExpanded={setSidebarExpanded}
-                                        />
-                                    );
-                                }}
-                            </SidebarLinkGroup>
+                                    activecondition={
+                                        pathname === "/committe/all" || pathname.includes("committe")
+                                    }
+                                >
+                                    {(handleClick, open) => {
+                                        return (
+                                            <CommitteMenu
+                                                handleClick={handleClick}
+                                                open={open}
+                                                sidebarExpanded={sidebarExpanded}
+                                                setSidebarExpanded={setSidebarExpanded}
+                                            />
+                                        );
+                                    }}
+                                </SidebarLinkGroup>
+                            }
                             {
-                                jsonObject?.role==='Teacher' &&
-                            <SidebarLinkGroup
-                                activecondition={
-                                    pathname === "/superviser/evaluation" || pathname.includes("superviser/evaluation")
-                                }
-                            >
-                                {(handleClick, open) => {
-                                    return (
-                                        <Superviser_eval_menu
-                                            handleClick={handleClick}
-                                            open={open}
-                                            sidebarExpanded={sidebarExpanded}
-                                            setSidebarExpanded={setSidebarExpanded}
-                                        />
-                                    );
-                                }}
-                            </SidebarLinkGroup>
-}
+                                jsonObject?.role === 'Teacher' &&
+                                <>
+                                <SidebarLinkGroup
+                                    activecondition={
+                                        pathname === "/superviser/evaluation" || pathname.includes("superviser/evaluation")
+                                    }
+                                >
+                                    {(handleClick, open) => {
+                                        return (
+                                            <Superviser_eval_menu
+                                                handleClick={handleClick}
+                                                open={open}
+                                                sidebarExpanded={sidebarExpanded}
+                                                setSidebarExpanded={setSidebarExpanded}
+                                            />
+                                        );
+                                    }}
+                                </SidebarLinkGroup>
+                                <SidebarLinkGroup
+                                    activecondition={
+                                        pathname === "/superviser/proposel" || pathname.includes("/superviser/proposel")
+                                    }
+                                >
+                                    {(handleClick, open) => {
+                                        return (
+                                            <SuperEvaluation_menu
+                                                handleClick={handleClick}
+                                                open={open}
+                                                sidebarExpanded={sidebarExpanded}
+                                                setSidebarExpanded={setSidebarExpanded}
+                                            />
+                                        );
+                                    }}
+                                </SidebarLinkGroup>
+                                </>
+                            }
                             {/* {
                                 jsonObject?.role==='Teacher' && */}
-                                <SidebarLinkGroup
+                            <SidebarLinkGroup
                                 activecondition={
                                     pathname === "/committe/evaluation" || pathname.includes("committe/evaluation")
                                 }
@@ -267,31 +287,31 @@ const jsonObject=JSON.parse(user);
                                     );
                                 }}
                             </SidebarLinkGroup>
-                            </>}
-                            {/* } */}
-                              {
-                                jsonObject?.role==='Student' &&
+
+
+                            {
+                                jsonObject?.role === 'Student' &&
                                 <SidebarLinkGroup
-                                activecondition={
-                                    pathname === "/evaluation/marks" || pathname.includes("/evaluation/marks")
-                                }
-                            >
-                                {(handleClick, open) => {
-                                    return (
-                                        <Evaluation_marks
-                                            handleClick={handleClick}
-                                            open={open}
-                                            sidebarExpanded={sidebarExpanded}
-                                            setSidebarExpanded={setSidebarExpanded}
-                                        />
-                                    );
-                                }}
-                            </SidebarLinkGroup>
+                                    activecondition={
+                                        pathname === "/evaluation/marks" || pathname.includes("/evaluation/marks")
+                                    }
+                                >
+                                    {(handleClick, open) => {
+                                        return (
+                                            <Evaluation_marks
+                                                handleClick={handleClick}
+                                                open={open}
+                                                sidebarExpanded={sidebarExpanded}
+                                                setSidebarExpanded={setSidebarExpanded}
+                                            />
+                                        );
+                                    }}
+                                </SidebarLinkGroup>
                             }
-                           
+
                             {/* {
                                 jsonObject?.role==='Teacher' && */}
-                                <SidebarLinkGroup
+                            <SidebarLinkGroup
                                 activecondition={
                                     pathname === "/evaluation/marks-list" || pathname.includes("/evaluation/marks-list")
                                 }
@@ -324,7 +344,7 @@ const jsonObject=JSON.parse(user);
                                 }}
                             </SidebarLinkGroup>
                             {/* } */}
-                           
+
                         </ul>
                     </div>
                 </div>

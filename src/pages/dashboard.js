@@ -49,6 +49,7 @@ import Upload_temp from '../partials/person/Upload_temp'
 import Download_temp from './person/Download_temp'
 import Create_Presentation from '../partials/person/Create_Presentation'
 import Presentations from './person/Presentations'
+import Proposel_Evaluation from '../partials/sidebar/sideMenu/Proposel_Evaluation'
 
 const Dashboard = ({ user }) => {
 
@@ -121,6 +122,8 @@ const Dashboard = ({ user }) => {
                             <Route exact path="/evaluation" element={<Evaluation />} />
                             <Route exact path="/evaluation/evaluate-proposel/:id" element={<CreateEvaluation />} />
                             <Route exact path="/superviser/evaluation" element={<Superviser_evaluation />} />
+                            <Route exact path="/superviser/proposel" element={<Proposel_Evaluation />} />
+
                             <Route exact path="/evaluation/evaluate-superviser/:id" element={<Superviser_evaluate />} />
                             <Route exact path="/committe/evaluation" element={<Committe_evaluation />} />
                             <Route exact path="/committe/evaluate/:id" element={<Create_Committe_eval />} />

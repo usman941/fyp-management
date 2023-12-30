@@ -106,22 +106,7 @@ const AdminSection = ({pathname,sidebarExpanded,setSidebarExpanded}) => {
           );
         }}
       </SidebarLinkGroup> */}
-      <SidebarLinkGroup
-        activecondition={
-          pathname === "/evaluation" || pathname.includes("evaluation")
-        }
-      >
-        {(handleClick, open) => {
-          return (
-            <EvaluationMenu
-              handleClick={handleClick}
-              open={open}
-              sidebarExpanded={sidebarExpanded}
-              setSidebarExpanded={setSidebarExpanded}
-            />
-          );
-        }}
-      </SidebarLinkGroup>
+      
     </>
   );
 };
