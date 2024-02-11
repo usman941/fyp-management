@@ -6,7 +6,6 @@ import Search from '../components/search'
 const Detail = ({ title, column, data, search, setSearch, children }) => {
 
     const handleSearch = (event) => {
-        console.log(event.target.value)
         setSearch(event.target.value);
     };
 

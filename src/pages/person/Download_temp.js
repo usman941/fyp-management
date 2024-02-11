@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useEffect, useState, useMemo,useCallback } from 'react'
 import axios from 'axios'
 import GenderCell from '../../components/tableCells/genderCell'
@@ -9,10 +9,13 @@ import Detail from '../../partials/detail'
 import { FaUserPlus } from 'react-icons/fa'
 import CreateNew from '../../components/createNew'
 import { toast } from 'react-toastify'
+import { AuthContext } from '../../context/AuthContext'
 
 const Download_temp = () => {
     const [persons, setPersons] = useState([])
-
+    const {user,setUser}=useContext(AuthContext);
+    
+    const jsonObject = JSON.parse(user);
     useEffect(() => {
         getPersons().then(data => {
             console.log("files:",data.files)
@@ -23,19 +26,28 @@ const Download_temp = () => {
     const url = 'http://localhost:3000/file/getall'
     const getPersons = async () => {
         try {
-            return await axios.get(url).then(res => res.data)
+            return await axios.get(url,{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            }).then(res => res.data)
         } catch (error) {
             console.log(error)
         }
     }
     const handleDelete = useCallback(async id => {
-        const url = 'http://localhost:3000/supervisor/deleteSupervisor/' + id
-        await axios.delete(url).then(res => {
+        const url = 'http://localhost:3000/file/' + id
+        await axios.delete(url,{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }).then(res => {
             setPersons(
                 persons.filter((value, index, arr) => {
                     return value._id !== id
                 })
             )
+            toast.success("File Deleted Successfully")
         })
     }, [persons]);
 
@@ -80,6 +92,16 @@ const Download_temp = () => {
             allowOverflow: true,
             button: true,
           },
+          {
+            name: 'Action',
+            cell: (person) => <div className='flex gap-2'>{jsonObject?.role==='Admin'?<>
+            <DeleteCell Event={handleDelete} param={person._id} /> </>:''}    
+
+            </div>,
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
+        },
 
     ], [handleDelete]);
     const [search, setSearch] = useState('');

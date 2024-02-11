@@ -16,6 +16,7 @@ import Evaluation_marks from "./sidebar/sideMenu/Evaluation_marks";
 import Marks_list_menu from "./sidebar/sideMenu/Marks_list_menu";
 import Presentation_menu from "./sidebar/sideMenu/Presentation_menu";
 import SuperEvaluation_menu from "./sidebar/sideMenu/SuperEvaluation_menu";
+import Evaluation2_menu from "./sidebar/sideMenu/Evaluation2_menu";
 
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
@@ -164,23 +165,27 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 : ""
                             }
 
-
-                            <SidebarLinkGroup
-                                activecondition={
-                                    pathname === "/template/download" || pathname.includes("/template/download")
-                                }
-                            >
-                                {(handleClick, open) => {
-                                    return (
-                                        <FormatUploaderMenu
-                                            handleClick={handleClick}
-                                            open={open}
-                                            sidebarExpanded={sidebarExpanded}
-                                            setSidebarExpanded={setSidebarExpanded}
-                                        />
-                                    );
-                                }}
-                            </SidebarLinkGroup>
+                            {
+                                jsonObject?.role!=='IndustryPerson' &&(
+                                    <SidebarLinkGroup
+                                    activecondition={
+                                        pathname === "/template/download" || pathname.includes("/template/download")
+                                    }
+                                >
+                                    {(handleClick, open) => {
+                                        return (
+                                            <FormatUploaderMenu
+                                                handleClick={handleClick}
+                                                open={open}
+                                                sidebarExpanded={sidebarExpanded}
+                                                setSidebarExpanded={setSidebarExpanded}
+                                            />
+                                        );
+                                    }}
+                                </SidebarLinkGroup>
+                                )
+                            }
+                           
                             <SidebarLinkGroup
                                 activecondition={
                                     pathname === "/project/all" || pathname.includes("projects")
@@ -197,24 +202,31 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                     );
                                 }}
                             </SidebarLinkGroup>
-                            <SidebarLinkGroup
-                                activecondition={
-                                    pathname === "/groups/all" || pathname.includes("groups")
-                                }
-                            >
-                                {(handleClick, open) => {
-                                    return (
-                                        <GroupsMenu
-                                            handleClick={handleClick}
-                                            open={open}
-                                            sidebarExpanded={sidebarExpanded}
-                                            setSidebarExpanded={setSidebarExpanded}
-                                        />
-                                    );
-                                }}
-                            </SidebarLinkGroup>
                             {
-                                jsonObject?.role !== 'Student' &&
+                                jsonObject?.role!=='IndustryPerson' &&(
+                                    <>
+                                    <SidebarLinkGroup
+                                    activecondition={
+                                        pathname === "/groups/all" || pathname.includes("groups")
+                                    }
+                                >
+                                    {(handleClick, open) => {
+                                        return (
+                                            <GroupsMenu
+                                                handleClick={handleClick}
+                                                open={open}
+                                                sidebarExpanded={sidebarExpanded}
+                                                setSidebarExpanded={setSidebarExpanded}
+                                            />
+                                        );
+                                    }}
+                                </SidebarLinkGroup>
+                                </>
+                                )
+                            }
+                           
+                            {
+                               ( jsonObject?.role !== 'Student' && jsonObject?.role !== 'Teacher' && jsonObject?.role !== 'IndustryPerson')   &&
                                 <SidebarLinkGroup
                                     activecondition={
                                         pathname === "/committe/all" || pathname.includes("committe")
@@ -233,7 +245,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </SidebarLinkGroup>
                             }
                             {
-                                jsonObject?.role === 'Teacher' &&
+                                (jsonObject?.role === 'Teacher' || jsonObject?.role !== 'IndustryPerson') &&
                                 <>
                                 <SidebarLinkGroup
                                     activecondition={
@@ -269,8 +281,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </SidebarLinkGroup>
                                 </>
                             }
-                            {/* {
-                                jsonObject?.role==='Teacher' && */}
+                            {
+                                (jsonObject?.role !== 'IndustryPerson' || jsonObject?.role!=='Admin') &&(
                             <SidebarLinkGroup
                                 activecondition={
                                     pathname === "/committe/evaluation" || pathname.includes("committe/evaluation")
@@ -288,9 +300,29 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 }}
                             </SidebarLinkGroup>
 
+                            )}
+                              {
+                                (jsonObject?.role !== 'IndustryPerson' || jsonObject?.role!=='Admin') &&(
+                            <SidebarLinkGroup
+                                activecondition={
+                                    pathname === "/committe/evaluation2" || pathname.includes("committe/evaluation2")
+                                }
+                            >
+                                {(handleClick, open) => {
+                                    return (
+                                        <Evaluation2_menu
+                                            handleClick={handleClick}
+                                            open={open}
+                                            sidebarExpanded={sidebarExpanded}
+                                            setSidebarExpanded={setSidebarExpanded}
+                                        />
+                                    );
+                                }}
+                            </SidebarLinkGroup>
 
+                            )}
                             {
-                                jsonObject?.role === 'Student' &&
+                                (jsonObject?.role === 'Student'  && jsonObject?.role!=='IndustryPerson')  && 
                                 <SidebarLinkGroup
                                     activecondition={
                                         pathname === "/evaluation/marks" || pathname.includes("/evaluation/marks")
@@ -309,8 +341,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </SidebarLinkGroup>
                             }
 
-                            {/* {
-                                jsonObject?.role==='Teacher' && */}
+                            {
+                                 (jsonObject?.role !== 'Teacher' && jsonObject?.role!=='IndustryPerson') &&(
                             <SidebarLinkGroup
                                 activecondition={
                                     pathname === "/evaluation/marks-list" || pathname.includes("/evaluation/marks-list")
@@ -327,6 +359,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                     );
                                 }}
                             </SidebarLinkGroup>
+                                )}
+                            {
+                               ( jsonObject?.role==='Teacher' || jsonObject?.role==='Admin') &&(
                             <SidebarLinkGroup
                                 activecondition={
                                     pathname === "/presentation/create" || pathname.includes("/presentation/create")
@@ -343,7 +378,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                     );
                                 }}
                             </SidebarLinkGroup>
-                            {/* } */}
+                           ) } 
 
                         </ul>
                     </div>

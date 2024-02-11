@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Alert from '../../../utils/alert';
 import { toast } from 'react-toastify';
 import { useTheme } from '@mui/material/styles';
@@ -12,7 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { ThemeProvider } from '@emotion/react';
 import styled from '@emotion/styled';
-const CreateEvaluation = () => {
+const Create_evl2 = () => {
     const { id } = useParams();
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -24,18 +24,7 @@ const CreateEvaluation = () => {
             },
         },
     };
-    const names = [
-        'Oliver Hansen',
-        'Van Henry',
-        'April Tucker',
-        'Ralph Hubbard',
-        'Omar Alexander',
-        'Carlos Abbott',
-        'Miriam Wagner',
-        'Bradley Wilkerson',
-        'Virginia Andrews',
-        'Kelly Snyder',
-    ];
+
     function getStyles(name, personName, theme) {
         return {
             fontWeight:
@@ -45,7 +34,6 @@ const CreateEvaluation = () => {
         };
     }
     const theme = useTheme();
-    
     const [personName, setPersonName] = React.useState([]);
     const [name, setName] = useState("");
 
@@ -66,14 +54,9 @@ const CreateEvaluation = () => {
     var [isUpdate, setIsUpdate] = useState(false);
     const [students, setStudents] = useState([]);
     const [inputValues, setInputValues] = useState({});
-    const location = useLocation();
+
     const [data, setData] = useState({});
-    // const inputHandleChange = (memberid, value) => {
-    //     setInputValues(preVal => ({
-    //         ...preVal,
-    //         [memberid]: value
-    //     }))
-    // }
+ 
     useEffect(() => {
         id &&
             axios
@@ -112,14 +95,14 @@ const CreateEvaluation = () => {
             members: [],
         }
     );
-
+    // handle setPerson members array
+    const handleMembers = (e) => {
+        setPerson((prevState) => ({
+            ...prevState,
+            members: [...prevState.members, e.target.value]
+        }));
+    }
     const addPersonHandler = async () => {
-        const totalMarks = {};
-        for(const memberId in marks){
-            totalMarks[memberId]=calculateTotalMarks(memberId)
-        }
-        console.log("totalMarksss:",totalMarks)
-      
         await axios.post("http://localhost:3000/group/create", {
             name: name,
             members: personName
@@ -145,16 +128,10 @@ const CreateEvaluation = () => {
     }
 const [comment,setComment]=useState("");
     const updatePersonHandler = async (id) => {
-        const totalMarks = {};
-        for(const memberId in marks){
-            totalMarks[memberId]=calculateTotalMarks(memberId)
-        }
-        console.log("totalMarksss:",totalMarks)
        
-        await axios.post("http://localhost:3000/evaluation/proposalEvaluation", {
+        await axios.post("http://localhost:3000/evaluation/evaluation2", {
             groupId: id,
-            marks: totalMarks,
-            comment
+            remarks:isYesChecked?"yes":"no",
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -165,7 +142,7 @@ const [comment,setComment]=useState("");
 
             if (res.status === 200) {
                 toast.success("Evaluated Successfully")
-                navigate('/evaluation')
+                navigate('/committe/evaluation')
             }
         }
         ).catch(err => {
@@ -193,7 +170,6 @@ const [comment,setComment]=useState("");
         }
     }
     const url = 'http://localhost:3000/marks/getTotalMarks'
-
     const getConfigMarks = async () => {
         try {
             return await axios.get(url,
@@ -210,7 +186,8 @@ const [comment,setComment]=useState("");
     useEffect(() => {
         getConfigMarks().then(data => {
             console.log("marks configgg:", data);
-            const proposalMarks = data?.marksConfig?.proposalMarks || {};
+            const proposalMarks = data?.marksConfig?.evaluation1Marks
+            || {};
             setMaxMarks({
                 problemStatement: proposalMarks.problemStatement || "",
                 solutionValidity: proposalMarks.solutionValidity || "",
@@ -218,11 +195,12 @@ const [comment,setComment]=useState("");
                 modules: proposalMarks.modules || "",
                 taskManagement: proposalMarks.taskManagement || "",
                 systemAnalysis: proposalMarks.systemAnalysis || "",
-                documentFormat: proposalMarks.documentFormat || ""
+                documentFormat: proposalMarks.documentFormat || "",
+                plagiarismReport: proposalMarks.plagiarismReport || ""
+
             });
         });
     }, []);
-    
     const [marks, setMarks] = useState({});
     const [maxMarks,setMaxMarks] =useState({
         problemStatement:0,
@@ -231,7 +209,9 @@ const [comment,setComment]=useState("");
         modules:0,
         taskManagement:0,
         systemAnalysis:0,
-        documentFormat:0
+        documentFormat:0,
+        plagiarismReport:0
+
       });
     const inputHandleChange = (memberId, criterion, value) => {
         const newValue = parseInt(value, 10) || 0;
@@ -251,65 +231,59 @@ const [comment,setComment]=useState("");
         const totalMarks = Object.values(memberMarks).reduce((acc, mark) => acc + mark, 0);
         return totalMarks;
       };
+      const [isYesChecked, setIsYesChecked] = useState(false);
+      const [isNoChecked, setIsNoChecked] = useState(false);
+    
+      const handleYesChange = () => {
+        setIsYesChecked(!isYesChecked);
+        // Uncheck "No" if "Yes" is checked
+        if (!isYesChecked) {
+          setIsNoChecked(false);
+        }
+      };
+    
+      const handleNoChange = () => {
+        setIsNoChecked(!isNoChecked);
+        // Uncheck "Yes" if "No" is checked
+        if (!isNoChecked) {
+          setIsYesChecked(false);
+        }
+      };
+
     return (
         <div>
-            {isAlert && <Alert redirect={alert.redirect} message={alert.message} />}
-            <div className='flex flex-col mb-2'>
-            <lable className="font-bold">Proposal Evaluation</lable>
+        {isAlert && <Alert redirect={alert.redirect} message={alert.message} />}
+        <div className='flex flex-col mb-2'>
+        <lable className="font-bold">Evaluation 2</lable>
 
-                <lable className="font-bold">Evaluate Group members</lable>
-            </div>
-            <form className="w-full max-w-lg" onSubmit={handleSubmit}>
-            {data?.members?.length > 0 ? (
-        data?.members?.map((item) => (
-          <div key={item._id} className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">{item.fname + ' ' + item.lname}</h2>
-
-            <div className="grid grid-cols-3 gap-4">
-              {Object.entries({
-                problemStatement: 'Problem Statement',
-                solutionValidity: 'Validity of Proposed',
-                motivation: 'Tools and Technologies',
-                modules: 'Modules',
-                taskManagement: 'Task Management',
-                systemAnalysis: 'Related System Analysis',
-                documentFormat: 'Document Format',
-            }).map(([criterion, label]) => (
-                <div key={criterion}>
-                    <label className="block text-sm font-semibold mb-1">{label}</label>
-                    <input
-                        type="number"
-                        value={marks[item._id]?.[criterion] || ''}
-                        onChange={(e) => inputHandleChange(item._id, criterion, e.target.value)}
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        placeholder={maxMarks[criterion].toString()}
-                        max={maxMarks[criterion]}
-                    />
-                </div>
-            ))}
-            </div>
-            <p className="mt-2">Total Marks: {calculateTotalMarks(item._id)}</p>
-          </div>
-        ))
-      ) : (
-        ''
-      )}
-                 <label className="block text-sm font-semibold mb-1">Comment</label>
-        <textarea
-          className="w-full h-24 px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-          name="comment"
-          placeholder="Comment"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        ></textarea>
-
-                <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 mr-2 mb-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">{isUpdate ? 'Evaluate' : 'Register'}</button>
-                <button className="text-black bg-white  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 mr-2 mb-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => navigate('/evaluation')}>Cancel</button>
-
-            </form>
-
+            <lable className="font-bold">Evaluate Group</lable>
         </div>
+        <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={isYesChecked}
+            onChange={handleYesChange}
+          />
+          Yes
+        </label>
+      </div>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={isNoChecked}
+            onChange={handleNoChange}
+          />
+          No
+        </label>
+      </div>
+      <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 mr-2 mb-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">{isUpdate ? 'Evaluate' : 'Register'}</button>
+    </form>
+
+    </div>
     )
 }
 
-export default CreateEvaluation
+export default Create_evl2

@@ -27,7 +27,10 @@ const PersonMenu = ({
       path: "/user/students",
       title: "Students",
     },
-    
+    {
+      path: "/user/get-marks-config",
+      title: "Marks Config",
+    },
     
   ];
 

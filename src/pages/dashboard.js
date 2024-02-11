@@ -50,6 +50,10 @@ import Download_temp from './person/Download_temp'
 import Create_Presentation from '../partials/person/Create_Presentation'
 import Presentations from './person/Presentations'
 import Proposel_Evaluation from '../partials/sidebar/sideMenu/Proposel_Evaluation'
+import GetMarksConfig from './person/GetMarksConfig'
+import SetTotalMarks from '../partials/person/SetTotalMarks'
+import Evaluation2 from '../partials/sidebar/sideMenu/Evaluation2'
+import Create_evl2 from '../partials/sidebar/sideMenu/Create_evl2'
 
 const Dashboard = ({ user }) => {
 
@@ -76,6 +80,10 @@ const Dashboard = ({ user }) => {
                             <Route exact path="/user/supervisers" element={<Supervisor />} />
                             <Route exact path="/user/advisors" element={<Adviser />} />
                             <Route exact path="/user/industry-persons" element={<IndustryPerson />} />
+                            {/* marks config */}
+                            <Route exact path="/user/get-marks-config" element={<GetMarksConfig/>} />
+                            <Route exact path="/user/create_config/:id" element={<SetTotalMarks/>} />
+
 
 
                             <Route exact path="/user/groups" element={<Groups />} />
@@ -127,7 +135,11 @@ const Dashboard = ({ user }) => {
 
                             <Route exact path="/evaluation/evaluate-superviser/:id" element={<Superviser_evaluate />} />
                             <Route exact path="/committe/evaluation" element={<Committe_evaluation />} />
+                            <Route exact path="/committe/evaluation2" element={<Evaluation2/>} />
+
                             <Route exact path="/committe/evaluate/:id" element={<Create_Committe_eval />} />
+                            <Route exact path="/committe/evaluate2/:id" element={<Create_evl2 />} />
+
                             <Route exact path="/evaluation/marks" element={<Evaluation_marks_list />} />
                             <Route exact path="/evaluation/marks-list" element={<Marks_list />} />
                             

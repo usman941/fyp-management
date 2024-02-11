@@ -9,21 +9,22 @@ import { FaUserPlus } from 'react-icons/fa'
 import CreateNew from '../../../components/createNew'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../../../context/AuthContext'
-import { useParams } from 'react-router-dom'
 
-const Marks_list = () => {
+
+const Evaluation2 = () => {
     const [persons, setPersons] = useState([])
     const {user}=useContext(AuthContext);
     
     const jsonObject = JSON.parse(user);
+    console.log("jsonObject:",jsonObject)
     useEffect(() => {
         getPersons().then(data => {
-            console.log("students marks list new:",data)
-            setPersons(data?.studentEvaluationDetails)
+            console.log("groups lists:",data.groups)
+            setPersons(data.groups)
         })
     }, [])
 
-    const url = 'http://localhost:3000/evaluation/getEvaluationmarksForAll'
+    const url = 'http://localhost:3000/group/getall'
     const getPersons = async () => {
         try {
             return await axios.get(url,
@@ -56,62 +57,49 @@ const Marks_list = () => {
         })
     }, [persons]);
 
-   
+
     const column = useMemo(() => [
         {
             name: '#',
-            selector: row => row?.name,
+            selector: row => row.name,
             sortable: true,
             filterable: true,
             cell: (row, index) => index + 1,
         },
         {
-            name: 'Student Name',
-            selector: row => row && row?.Name,
+            name: 'Group Name',
+            selector: row => row.name,
             sortable: true,
             filterable: true,
         },
         {
-            name: 'Proposel Marks',
-            selector: row => row?.ProposalMarks!=null?row?.ProposalMarks:"Not Evaluated",
+            name: 'Members',
+            selector: row => row.members.map((member,index)=>member.fname+' '+member.lname).join(', '),
             sortable: true,
             filterable: true,
         },
         {
-            name: 'Supervisor Marks',
-            selector: row => row?.SupervisorMarks!=null?row?.SupervisorMarks:"Not Evaluated",
+            name: 'Supervisor',
+            selector: row => row?.supervisor?.fname? row?.supervisor?.fname+' '+row?.supervisor?.lname:"Not Assigned",
             sortable: true,
             filterable: true,
         },
         {
-            name: 'Evaluation 1 Marks',
-            selector: row => row?.Evaluation1Marks!=null?row?.Evaluation1Marks:"Not Evaluated",
-            sortable: true,
-            filterable: true,
-        },
-        {
-            name: 'Total Obtained Marks',
-            selector: row => row?.TotalObtainedMarks!=null?row?.TotalObtainedMarks:"Not Evaluated",
-            sortable: true,
-            filterable: true,
-        },
-        {
-            name: 'Evaluation 2 ',
-            selector: row => row?.Evaluation2Result!=null?row?.Evaluation2Result:"Not Evaluated",
-            sortable: true,
-            filterable: true,
-        },
-        {
-            name: 'Proposal Comments ',
-            selector: row => row?.ProposalComments!=null?row?.ProposalComments:"Not Evaluated",
-            sortable: true,
-            filterable: true,
-        },
-        {
-            name: 'Evaluation 1 Comments ',
-            selector: row => row?.Evaluation1Comments!=null?row?.Evaluation1Comments:"Not Evaluated",
-            sortable: true,
-            filterable: true,
+            name: 'Action',
+            cell: (person) => <div className='flex gap-2'>
+                {jsonObject?.role==='Admin'?<>
+            <DeleteCell Event={handleDelete} param={person?._id} />
+             </>
+            :''}
+                {jsonObject?.role==='Teacher'?<>
+                <EditCell path={'/committe/evaluate2/'+person?._id}/>
+             </>
+            :''}
+             
+            </div>,
+            ignoreRowClick: true,
+            allowOverflow: true,
+            button: true,
         },
 
     ], [handleDelete]);
@@ -119,12 +107,14 @@ const Marks_list = () => {
 
     const filterFunction = (search, data) => {
         return data.filter((row) =>
-            row?.Name?.toLowerCase().includes(search.toLowerCase())
+            row.name.toLowerCase().includes(search.toLowerCase()) ||
+            row.members.map((member,index)=>member.fname+' '+member.lname).join(', ').toLowerCase().includes(search.toLowerCase()) ||
+            row?.supervisor?.fname? row?.supervisor?.fname+' '+row?.supervisor?.lname:"Not Assigned".toLowerCase().includes(search.toLowerCase())
             );
     };
     return (
 
-        <Detail title={'Students Marks List'} column={column} data={filterFunction(search,persons)} search={search} setSearch={setSearch}>
+        <Detail title={'Evaluation 2'} column={column} data={filterFunction(search,persons)} search={search} setSearch={setSearch}>
             {/* <CreateNew title={'Add New'} path={'/evaluation/evaluate-proposel'} >
                 <FaUserPlus size={17} className='text-white' />
             </CreateNew> */}
@@ -133,4 +123,4 @@ const Marks_list = () => {
     )
 }
 
-export default Marks_list
+export default Evaluation2

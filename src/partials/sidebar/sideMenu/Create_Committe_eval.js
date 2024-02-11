@@ -24,18 +24,7 @@ const Create_Committe_eval = () => {
             },
         },
     };
-    const names = [
-        'Oliver Hansen',
-        'Van Henry',
-        'April Tucker',
-        'Ralph Hubbard',
-        'Omar Alexander',
-        'Carlos Abbott',
-        'Miriam Wagner',
-        'Bradley Wilkerson',
-        'Virginia Andrews',
-        'Kelly Snyder',
-    ];
+
     function getStyles(name, personName, theme) {
         return {
             fontWeight:
@@ -67,12 +56,7 @@ const Create_Committe_eval = () => {
     const [inputValues, setInputValues] = useState({});
 
     const [data, setData] = useState({});
-    const inputHandleChange = (memberid, value) => {
-        setInputValues(preVal => ({
-            ...preVal,
-            [memberid]: value
-        }))
-    }
+ 
     useEffect(() => {
         id &&
             axios
@@ -142,12 +126,17 @@ const Create_Committe_eval = () => {
             console.log("error", err.response.data.error);
         });
     }
-
+const [comment,setComment]=useState("");
     const updatePersonHandler = async (id) => {
-
+        const totalMarks = {};
+        for(const memberId in marks){
+            totalMarks[memberId]=calculateTotalMarks(memberId)
+        }
+        console.log("totalMarksss:",totalMarks)
         await axios.post("http://localhost:3000/evaluation/evaluation1", {
             groupId: id,
-            marks: inputValues
+            marks: totalMarks,
+            comment
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -185,37 +174,128 @@ const Create_Committe_eval = () => {
 
         }
     }
+    const url = 'http://localhost:3000/marks/getTotalMarks'
+    const getConfigMarks = async () => {
+        try {
+            return await axios.get(url,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+                ).then(res => res.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        getConfigMarks().then(data => {
+            console.log("marks configgg:", data);
+            const proposalMarks = data?.marksConfig?.evaluation1Marks
+            || {};
+            setMaxMarks({
+                problemStatement: proposalMarks.problemStatement || "",
+                solutionValidity: proposalMarks.solutionValidity || "",
+                motivation: proposalMarks.motivation || "",
+                modules: proposalMarks.modules || "",
+                taskManagement: proposalMarks.taskManagement || "",
+                systemAnalysis: proposalMarks.systemAnalysis || "",
+                documentFormat: proposalMarks.documentFormat || "",
+                plagiarismReport: proposalMarks.plagiarismReport || ""
+
+            });
+        });
+    }, []);
+    const [marks, setMarks] = useState({});
+    const [maxMarks,setMaxMarks] =useState({
+        problemStatement:0,
+        solutionValidity:0,
+        motivation:0,
+        modules:0,
+        taskManagement:0,
+        systemAnalysis:0,
+        documentFormat:0,
+        plagiarismReport:0
+
+      });
+    const inputHandleChange = (memberId, criterion, value) => {
+        const newValue = parseInt(value, 10) || 0;
+        const clampedValue = Math.min(newValue, maxMarks[criterion]);
+    
+        setMarks((prevMarks) => ({
+          ...prevMarks,
+          [memberId]: {
+            ...prevMarks[memberId],
+            [criterion]: clampedValue,
+          },
+        }));
+      };
+  
+      const calculateTotalMarks = (memberId) => {
+        const memberMarks = marks[memberId] || {};
+        const totalMarks = Object.values(memberMarks).reduce((acc, mark) => acc + mark, 0);
+        return totalMarks;
+      };
     return (
         <div>
-            {isAlert && <Alert redirect={alert.redirect} message={alert.message} />}
-            <div className='flex mb-2'>
-                <h1>Evaluate Group</h1>
-            </div>
-            <form className="w-full max-w-lg" onSubmit={handleSubmit}>
-                {
-                    data?.members?.length > 0 ?
-                        data?.members?.map((item, index) => (
+        {isAlert && <Alert redirect={alert.redirect} message={alert.message} />}
+        <div className='flex flex-col mb-2'>
+        <lable className="font-bold">Evaluation 1</lable>
 
-
-                            <div className="flex flex-wrap -mx-3 mb-6">
-                                <div className="w-full  px-3">
-                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-last-name">
-                                        {item.fname + ' ' + item.lname}
-                                    </label>
-                                    <input type="number" onChange={(e) => inputHandleChange(item._id, e.target.value)} className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="" required />
-                                </div>
-
-                            </div>))
-                        : ''
-                }
-
-
-                <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 mr-2 mb-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">{isUpdate ? 'Evaluate' : 'Register'}</button>
-                <button className="text-black bg-white  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 mr-2 mb-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => navigate('/committe/evaluation')}>Cancel</button>
-
-            </form>
-
+            <lable className="font-bold">Evaluate Group members</lable>
         </div>
+        <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+        {data?.members?.length > 0 ? (
+    data?.members?.map((item) => (
+      <div key={item._id} className="mb-6">
+        <h2 className="text-xl font-semibold mb-2">{item.fname + ' ' + item.lname}</h2>
+
+        <div className="grid grid-cols-3 gap-4">
+          {Object.entries({
+            problemStatement: 'Problem Statement',
+            solutionValidity: 'Validity of Proposed',
+            motivation: 'Tools and Technologies',
+            modules: 'Modules',
+            taskManagement: 'Task Management',
+            systemAnalysis: 'Related System Analysis',
+            documentFormat: 'Document Format',
+            plagiarismReport:"Plagiarism Report",
+        }).map(([criterion, label]) => (
+            <div key={criterion}>
+                <label className="block text-sm font-semibold mb-1">{label}</label>
+                <input
+                    type="number"
+                    value={marks[item._id]?.[criterion] || ''}
+                    onChange={(e) => inputHandleChange(item._id, criterion, e.target.value)}
+                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    placeholder={maxMarks[criterion].toString()}
+                    max={maxMarks[criterion]}
+                />
+            </div>
+        ))}
+        </div>
+       
+        <p className="mt-2">Total Marks: {calculateTotalMarks(item._id)}</p>
+      </div>
+    ))
+  ) : (
+    ''
+  )}
+ <label className="block text-sm font-semibold mb-1">Comment</label>
+        <textarea
+          className="w-full h-24 px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+          name="comment"
+          placeholder="Comment"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        ></textarea>
+
+            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 mr-2 mb-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">{isUpdate ? 'Evaluate' : 'Register'}</button>
+            <button className="text-black bg-white  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 mr-2 mb-2  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" onClick={() => navigate('/evaluation')}>Cancel</button>
+
+        </form>
+
+    </div>
     )
 }
 

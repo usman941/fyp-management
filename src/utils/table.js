@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import DataTable from 'react-data-table-component';
 import { FiDownload } from 'react-icons/fi';
-
+import { customStyles } from './customStyles';
 
 
 const Export = ({ onExport }) => <button
@@ -65,7 +65,7 @@ export default function MyDataTable({ column, data }) {
 
 
     const updateState = useCallback(state => console.log(state), []);
-
+   
     return (
         <DataTable
             columns={column}
@@ -77,9 +77,10 @@ export default function MyDataTable({ column, data }) {
             fixedHeader={true}
             fixedHeaderScrollHeight={'calc(100vh - 30rem)'}
             onSelectedRowsChange={updateState}
-            actions={actionsMemo}
+            // actions={actionsMemo}
             expandOnRowClicked={true}
             autoWidth={true}
+            customStyles={customStyles}
 
 
 
