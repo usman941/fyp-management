@@ -25,7 +25,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     const { pathname } = location;
     console.log("user in sidebar:", user);
     const jsonObject = JSON.parse(user);
-    console.log("role in sidebar:", jsonObject.id);
+    console.log("role in sidebar:", jsonObject?.id);
     const trigger = useRef(null);
     const sidebar = useRef(null);
 

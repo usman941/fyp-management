@@ -56,8 +56,6 @@ import Evaluation2 from '../partials/sidebar/sideMenu/Evaluation2'
 import Create_evl2 from '../partials/sidebar/sideMenu/Create_evl2'
 
 const Dashboard = ({ user }) => {
-
-    console.log("user in dashboard:", user)
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
@@ -65,7 +63,7 @@ const Dashboard = ({ user }) => {
 
         <div className="flex h-screen overflow-hidden">
             {/* Sidebar */}
-            <Sidebar role={JSON.parse(user)} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+            <Sidebar role={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
             <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
                 <Header user={user} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />

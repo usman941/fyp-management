@@ -1,7 +1,7 @@
 import React,{useState,useEffect, useContext} from 'react';
 import Form from './partials/logInSignUp/form';
 import {Routes, Route, useNavigate} from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './pages/dashboard';
 import { AuthContext } from './context/AuthContext';
