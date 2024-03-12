@@ -17,6 +17,8 @@ import Marks_list_menu from "./sidebar/sideMenu/Marks_list_menu";
 import Presentation_menu from "./sidebar/sideMenu/Presentation_menu";
 import SuperEvaluation_menu from "./sidebar/sideMenu/SuperEvaluation_menu";
 import Evaluation2_menu from "./sidebar/sideMenu/Evaluation2_menu";
+import Setting from "./sidebar/sideMenu/Setting";
+import StudentReqMenu from "./sidebar/sideMenu/StudentReqMenu";
 
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
@@ -224,6 +226,28 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 </>
                                 )
                             }
+                             {/* {
+                                jsonObject?.role!=='' &&(
+                                    <> */}
+                                    <SidebarLinkGroup
+                                    activecondition={
+                                        pathname === "/request/student" || pathname.includes("students")
+                                    }
+                                >
+                                    {(handleClick, open) => {
+                                        return (
+                                            <StudentReqMenu
+                                                handleClick={handleClick}
+                                                open={open}
+                                                sidebarExpanded={sidebarExpanded}
+                                                setSidebarExpanded={setSidebarExpanded}
+                                            />
+                                        );
+                                    }}
+                                </SidebarLinkGroup>
+                                {/* </>
+                                )
+                            } */}
                            
                             {
                                ( jsonObject?.role !== 'Student' && jsonObject?.role !== 'Teacher' && jsonObject?.role !== 'IndustryPerson')   &&
@@ -379,6 +403,22 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                 }}
                             </SidebarLinkGroup>
                            ) } 
+                               <SidebarLinkGroup
+                                activecondition={
+                                    pathname === "/setting" || pathname.includes("/setting")
+                                }
+                            >
+                                {(handleClick, open) => {
+                                    return (
+                                        <Setting
+                                            handleClick={handleClick}
+                                            open={open}
+                                            sidebarExpanded={sidebarExpanded}
+                                            setSidebarExpanded={setSidebarExpanded}
+                                        />
+                                    );
+                                }}
+                            </SidebarLinkGroup>
 
                         </ul>
                     </div>

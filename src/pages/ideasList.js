@@ -16,7 +16,7 @@ import { Button } from '@mui/material'
 const IdeasList = () => {
     const [persons, setPersons] = useState([])
     const { user, setUser } = useContext(AuthContext);
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
 
     const cancelButtonRef = useRef(null)
     const jsonObject = JSON.parse(user);

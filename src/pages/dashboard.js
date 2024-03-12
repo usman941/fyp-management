@@ -54,6 +54,8 @@ import GetMarksConfig from './person/GetMarksConfig'
 import SetTotalMarks from '../partials/person/SetTotalMarks'
 import Evaluation2 from '../partials/sidebar/sideMenu/Evaluation2'
 import Create_evl2 from '../partials/sidebar/sideMenu/Create_evl2'
+import Settings from '../partials/person/Settings'
+import StudentReq from './StudentReq'
 
 const Dashboard = ({ user }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -94,6 +96,7 @@ const Dashboard = ({ user }) => {
                             <Route exact path="/presentation/update/:id" element={<Create_Presentation />} />
 
                             <Route exact path="/presentation/all" element={<Presentations/>} />
+                            <Route exact path="/setting" element={<Settings/>} />
 
 
 
@@ -119,6 +122,8 @@ const Dashboard = ({ user }) => {
                             <Route exact path="/groups/create" element={<CreateGroup />} />
                             <Route exact path="/groups/update/:id" element={<CreateGroup />} />
                             <Route exact path="/upload/template" element={<Upload_temp />} />
+
+                            <Route exact path="/request/student" element={<StudentReq/>} />
 
                             {/* committe */}
                             <Route exact path="/committe/all" element={<CommitteList />} />

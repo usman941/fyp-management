@@ -12,7 +12,7 @@ import { Button } from '@mui/material'
 
 const Marks_list = () => {
     const [persons, setPersons] = useState([])
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
 
   const cancelButtonRef = useRef(null)
     const {user}=useContext(AuthContext);
