@@ -11,12 +11,12 @@ import { AuthContext } from './context/AuthContext';
 function App() {
     const {user,setUser}=useContext(AuthContext);
     const navigate=useNavigate();
-   useEffect(()=>{
-    if(!localStorage.getItem('token'))
-    {
-      navigate('/login')
-    }
-   },[user])
+  //  useEffect(()=>{
+  //   if(!localStorage.getItem('token'))
+  //   {
+  //     navigate('/login')
+  //   }
+  //  },[user])
 
 
   return (

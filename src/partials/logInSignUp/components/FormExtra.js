@@ -1,6 +1,7 @@
 export default function FormExtra({TogglePassword}){
     return(
-        <div className="flex items-center justify-between ">
+      <>
+       <div className="flex ">
         <div className="flex items-center">
           <input
             id="remember-me"
@@ -14,12 +15,20 @@ export default function FormExtra({TogglePassword}){
           </label>
         </div>
 
-        {/* <div className="text-sm">
-          <a href="/" className="font-medium text-slate-600 hover:text-slate-500">
-            Forgot your password?
-          </a>
-        </div> */}
+
+       
       </div>
+        <div className="flex flex-col items-end justify-end ">
+       
+
+
+        <div className="text-sm">
+          <a href="/signup" className="font-medium text-blue-500">
+            Signup?
+          </a>
+        </div>
+      </div>
+      </>
 
     )
 }
